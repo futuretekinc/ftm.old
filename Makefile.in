@@ -1,0 +1,56 @@
+include ${TOPDIR}/.config
+
+export PLATFORM=${CONFIG_PLATFORM}
+export MODEL=${CONFIG_MODEL}
+export CROSS_COMPILE=${CONFIG_CROSS_COMPILE}
+export HOST=arm-linux
+export TARGETMACH=arm-linux
+export CC=${CROSS_COMPILE}gcc
+export CXX=${CROSS_COMPILE}g++
+export AR=${CROSS_COMPILE}ar
+export LD=${CROSS_COMPILE}ld
+export AS=${CROSS_COMPILE}as
+export STRIP=${CROSS_COMPILE}strip
+export RANLIB=${CORSS}ranlib
+export PREFIX=/usr
+
+CONFIGDIR=/etc/config
+INITDDIR=/etc/init.d
+RCDDIR=/etc/rc.d
+
+define init_package
+	$(eval FILE_NAME := $1)
+	if [ ! -d ${FILE_NAME} ]; then \
+		case $(shell ls ${PKGDIR}/ | grep "${FILE_NAME}\." | sed "s/${FILE_NAME}.//") in \
+			tar.gz) tar xvfz ${PKGDIR}/${FILE_NAME}.tar.gz;; \
+			tar.bz2) tar xvfj ${PKGDIR}/${FILE_NAME}.tar.bz2;; \
+			tar.xz) tar xvfJ ${PKGDIR}/${FILE_NAME}.tar.xz;; \
+			zip) unzip ${PKGDIR}/${FILE_NAME}.zip;; \
+			*) echo "Unknown file type";; \
+		esac; \
+		if [ -d patch ]; then \
+			patch -p0 < patch/$1.diff; \
+		fi; \
+	fi; 
+endef
+
+define reinit_package
+	[ -d $1 ] && rm -rf $1; \
+	$(call init_package,$1)
+endef
+
+define build_package
+	make -C $1 ${BUILD_OPTIONS}
+endef
+
+define install_package
+	make -C $1 install  ${INSTALL_OPTIONS}
+endef
+
+define clean_package
+	rm -rf $1 
+endef
+
+define distclean_package
+	rm -rf $1 .configured
+endef

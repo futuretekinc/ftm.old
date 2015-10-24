@@ -1,0 +1,31 @@
+CONFIG_BASE=ftm-100s
+CONFIG_MODEL=ftm-100s-wips
+
+CONFIG_GMP=y
+CONFIG_PCRE=y
+CONFIG_LIBUBOX=y
+CONFIG_LIBPCAP=y
+CONFIG_QDECODER=y
+CONFIG_ZLIB=y
+
+CONFIG_BUSYBOX=y
+CONFIG_OPENSSL=y
+CONFIG_IPTABLES=y
+CONFIG_OPENSSH=y
+CONFIG_TCPDUMP=y
+CONFIG_LUA=y
+CONFIG_UCI=y
+CONFIG_STRONGSWAN=y
+CONFIG_HOTPLUG2=y
+CONFIG_NTPCLIENT=y
+CONFIG_DROPBEAR=y
+CONFIG_LIGHTTPD=y
+CONFIG_WEBADMIN=y
+CONFIG_NET_SNMP=y
+CONFIG_MOSQUITTO=y
+# CONFIG_NODE=y
+# CONFIG_TPGW=y
+CONFIG_AP=y
+
+LIBS=gmp pcre libubox zlib qdecoder libpcap
+APPS=base network busybox openssl iptables openssh tcpdump lua uci strongswan hotplug2 ntpclient dropbear lighttpd webadmin net-snmp mosquitto wifi udhcpd
