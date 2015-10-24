@@ -1,7 +1,4 @@
 export TOPDIR=${CURDIR}
-export PKGDIR=${TOPDIR}/pkg
-export BUILDDIR=${TOPDIR}/build
-export DESTDIR=${TOPDIR}/_root
 
 include Makefile.in
 
@@ -55,7 +52,7 @@ config_libs:
 	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
 	for lib in $(LIBS); do \
 		[ -d ${BUILDDIR}/$$lib ] || (cd ${BUILDDIR}; tar xvfz ${PKGDIR}/$$lib-pkg.tar.gz);\
-		make -C ${BUILDDIR}/$$lib config DESTDIR=${DESTDIR}; \
+		make -C ${BUILDDIR}/$$lib config DESTDIR=${DESTDIR} ; \
 	done
 
 config_apps: install_libs
@@ -64,17 +61,17 @@ config_apps: install_libs
 		if [ ! -d ${BUILDDIR}/$$app ]; then \
 			(cd ${BUILDDIR}; tar xvfz ${PKGDIR}/$$app-pkg.tar.gz) \
 		fi;\
-		make -C ${BUILDDIR}/$$app config DESTDIR=${DESTDIR}; \
+		make -C ${BUILDDIR}/$$app config DESTDIR=${DESTDIR} ; \
 	done
 	
 build_libs:  config_libs
 	for app in $(LIBS); do \
-		make -C ${BUILDDIR}/$$app build; \
+		make -C ${BUILDDIR}/$$app build ; \
 	done
 
 build_apps:  config_apps
 	for app in $(APPS); do \
-		make -C ${BUILDDIR}/$$app build; \
+		make -C ${BUILDDIR}/$$app build ; \
 	done
 
 install_libs: build_libs
@@ -84,7 +81,7 @@ install_libs: build_libs
 		mkdir -p ${DESTDIR} ;\
 	fi
 	for app in $(LIBS); do \
-		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR}; \
+		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR} ; \
 	done
 
 install_apps: build_apps
@@ -94,7 +91,7 @@ install_apps: build_apps
 		mkdir -p ${DESTDIR} ;\
 	fi
 	for app in $(APPS); do \
-		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR}; \
+		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR} ; \
 	done
 	tools/make_image ${DESTDIR} rootfs.img
 
@@ -104,7 +101,7 @@ install_apps: build_apps
 
 clean:
 	for app in $(LIBS) $(APPS); do \
-		make -C ${BUILDDIR}$$app clean; \
+		make -C ${BUILDDIR}/$$app clean ; \
 	done
 
 distclean:

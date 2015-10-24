@@ -3,7 +3,7 @@ include ${TOPDIR}/.config
 export PLATFORM=${CONFIG_PLATFORM}
 export MODEL=${CONFIG_MODEL}
 export CROSS_COMPILE=${CONFIG_CROSS_COMPILE}
-export HOST=arm-linux
+export HOST=${CONFIG_HOST}
 export TARGETMACH=arm-linux
 export CC=${CROSS_COMPILE}gcc
 export CXX=${CROSS_COMPILE}g++
@@ -12,6 +12,10 @@ export LD=${CROSS_COMPILE}ld
 export AS=${CROSS_COMPILE}as
 export STRIP=${CROSS_COMPILE}strip
 export RANLIB=${CORSS}ranlib
+
+export PKGDIR=${TOPDIR}/pkg
+export BUILDDIR=${TOPDIR}/build
+export DESTDIR=${TOPDIR}/_root
 export PREFIX=/usr
 
 CONFIGDIR=/etc/config
@@ -27,9 +31,9 @@ define init_package
 			tar.xz) tar xvfJ ${PKGDIR}/${FILE_NAME}.tar.xz;; \
 			zip) unzip ${PKGDIR}/${FILE_NAME}.zip;; \
 			*) echo "Unknown file type";; \
-		esac; \
+		esac ; \
 		if [ -d patch ]; then \
-			patch -p0 < patch/$1.diff; \
+			patch -p0 < patch/$1.diff ; \
 		fi; \
 	fi; 
 endef
@@ -40,11 +44,11 @@ define reinit_package
 endef
 
 define build_package
-	make -C $1 ${BUILD_OPTIONS}
+	make -C $1 ${BUILD_OPTIONS} 
 endef
 
 define install_package
-	make -C $1 install  ${INSTALL_OPTIONS}
+	make -C $1 install  ${INSTALL_OPTIONS} 
 endef
 
 define clean_package
@@ -52,5 +56,5 @@ define clean_package
 endef
 
 define distclean_package
-	rm -rf $1 .configured
+	rm -rf $1 .configured 
 endef
