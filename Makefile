@@ -42,7 +42,7 @@ apps-${CONFIG_UCI} += uci
 apps-${CONFIG_TCPDUMP} += tcpdump 
 
 LIBS=${libs-y}
-APPS=${apps-y}
+#APPS=${apps-y}
 
 all: install_apps
 	
