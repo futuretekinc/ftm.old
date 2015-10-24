@@ -2,16 +2,16 @@ include ${TOPDIR}/.config
 
 export PLATFORM=${CONFIG_PLATFORM}
 export MODEL=${CONFIG_MODEL}
-export CROSS_COMPILE=${CONFIG_CROSS_COMPILE}
+export CROSS=${CONFIG_CROSS_COMPILE}
 export HOST=${CONFIG_HOST}
 export TARGETMACH=arm-linux
-export CC=${CROSS_COMPILE}gcc
-export CXX=${CROSS_COMPILE}g++
-export AR=${CROSS_COMPILE}ar
-export LD=${CROSS_COMPILE}ld
-export AS=${CROSS_COMPILE}as
-export STRIP=${CROSS_COMPILE}strip
-export RANLIB=${CORSS}ranlib
+export CC=${CROSS}gcc
+export CXX=${CROSS}g++
+export AR=${CROSS}ar
+export LD=${CROSS}ld
+export AS=${CROSS}as
+export STRIP=${CROSS}strip
+export RANLIB=${CROSS}ranlib
 
 export PKGDIR=${TOPDIR}/pkg
 export BUILDDIR=${TOPDIR}/build
