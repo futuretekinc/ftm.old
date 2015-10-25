@@ -22,6 +22,8 @@ CONFIGDIR=/etc/config
 INITDDIR=/etc/init.d
 RCDDIR=/etc/rc.d
 
+CONFIGURED_FILE=${BUILDDIR}/.configured	
+
 define init_package
 	$(eval FILE_NAME := $1)
 	if [ ! -d ${FILE_NAME} ]; then \
@@ -47,8 +49,33 @@ define build_package
 	make -C $1 ${BUILD_OPTIONS} 
 endef
 
+define config_package
+	CONFIGURED="$(shell cat ${CONFIGURED_FILE} 2>&1 | grep $1)"
+	if [ "${CONFIGURED}" != "$1" ]; then \
+		(cd $1;./configure $2); echo $1 >> ${CONFIGURED_FILE};\
+	fi	
+endef
+
+define reconfig_package
+	(cd $1;./configure $2)
+	CONFIGURED="$(shell cat ${CONFIGURED_FILE} 2>&1 | grep $1)"
+	if [ "${CONFIGURED}" == "$1" ]; then \
+		echo $1 >> ${CONFIGURED_FILE};\
+	else \
+	fi	
+endef
+
+define set_configured_package
+	echo $1 >> ${CONFIGURED_FILE}
+endef
+
 define install_package
 	make -C $1 install  ${INSTALL_OPTIONS} 
+endef
+
+define copy_package
+	[ -d $2 ] || mkdir -p $2
+	cp -r $1/* $2/
 endef
 
 define clean_package
@@ -56,5 +83,5 @@ define clean_package
 endef
 
 define distclean_package
-	rm -rf $1 .configured 
+	rm -rf $1 
 endef

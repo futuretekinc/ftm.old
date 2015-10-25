@@ -42,37 +42,47 @@ apps-${CONFIG_UCI} += uci
 apps-${CONFIG_TCPDUMP} += tcpdump 
 
 LIBS=${libs-y}
-#APPS=${apps-y}
+APPS=${apps-y}
 
 all: install_apps
 	
 phase1: build_libs
 
 config_libs: 
-	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
-	for lib in $(LIBS); do \
-		[ -d ${BUILDDIR}/$$lib ] || (cd ${BUILDDIR}; tar xvfz ${PKGDIR}/$$lib-pkg.tar.gz);\
-		make -C ${BUILDDIR}/$$lib config DESTDIR=${DESTDIR} ; \
-	done
+	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}; 
+	( \
+		cd ${BUILDDIR}; \
+		for lib in $(LIBS); do \
+			[ -d $$lib ] || tar xvfz ${PKGDIR}/$$lib-pkg.tar.gz ;\
+			make -C $$lib config DESTDIR=${DESTDIR} ; \
+		done ; \
+	)
 
 config_apps: install_libs
-	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}
-	for app in $(APPS); do \
-		if [ ! -d ${BUILDDIR}/$$app ]; then \
-			(cd ${BUILDDIR}; tar xvfz ${PKGDIR}/$$app-pkg.tar.gz) \
-		fi;\
-		make -C ${BUILDDIR}/$$app config DESTDIR=${DESTDIR} ; \
-	done
-	
+	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}; 
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(APPS); do \
+			[ -d $$app ] || tar xvfz ${PKGDIR}/$$app-pkg.tar.gz ; \
+			make -C $$app config DESTDIR=${DESTDIR} ; \
+		done; \
+	)
+
 build_libs:  config_libs
-	for app in $(LIBS); do \
-		make -C ${BUILDDIR}/$$app build ; \
-	done
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(LIBS); do \
+			make -C $$app build ; \
+		done; \
+	)
 
 build_apps:  config_apps
-	for app in $(APPS); do \
-		make -C ${BUILDDIR}/$$app build ; \
-	done
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(APPS); do \
+			make -C $$app build ; \
+		done; \
+	)
 
 install_libs: build_libs
 	if [ -d ${DESTDIR} ]; then \
@@ -80,9 +90,12 @@ install_libs: build_libs
 	else \
 		mkdir -p ${DESTDIR} ;\
 	fi
-	for app in $(LIBS); do \
-		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR} ; \
-	done
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(LIBS); do \
+			make -C $$app install DESTDIR=${DESTDIR} ; \
+		done; \
+	)
 
 install_apps: build_apps
 	if [ -d ${DESTDIR} ]; then \
@@ -90,19 +103,25 @@ install_apps: build_apps
 	else \
 		mkdir -p ${DESTDIR} ;\
 	fi
-	for app in $(APPS); do \
-		make -C ${BUILDDIR}/$$app install DESTDIR=${DESTDIR} ; \
-	done
-	tools/make_image ${DESTDIR} rootfs.img
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(APPS); do \
+			make -C $$app install DESTDIR=${DESTDIR} ; \
+		done; \
+	)
+	${TOPDIR}/tools/make_image ${DESTDIR} rootfs.img
 
 #	if [ -d ${DESTDIR} ]; then \
 		rm -rf ${DESTDIR} ;\
 	fi
 
 clean:
-	for app in $(LIBS) $(APPS); do \
-		make -C ${BUILDDIR}/$$app clean ; \
-	done
+	( \
+		cd ${BUILDDIR}; \
+		for app in $(LIBS) $(APPS); do \
+			make -C $$app clean ; \
+		done; \
+	)
 
 distclean:
 	rm -rf ${BUILDDIR}
