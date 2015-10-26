@@ -4,53 +4,53 @@ export TOPDIR
 
 include Makefile.in
 
-libs-y= 
-libs-${CONFIG_GMP} += gmp
-libs-${CONFIG_PCRE} += pcre 
-libs-${CONFIG_LIBUBOX} += libubox 
-libs-${CONFIG_ZLIB} += zlib 
-libs-${CONFIG_QDECODER} += qdecoder 
-libs-${CONFIG_LIBPCAP} += libpcap
+phase1-y= 
+phase1-${CONFIG_GMP} += gmp
+phase1-${CONFIG_PCRE} += pcre 
+phase1-${CONFIG_LIBUBOX} += libubox 
+phase1-${CONFIG_ZLIB} += zlib 
+phase1-${CONFIG_QDECODER} += qdecoder 
+phase1-${CONFIG_LIBPCAP} += libpcap
+phase1-${CONFIG_OPENSSL} += openssl 
 
-apps-y=
-apps-${CONFIG_BASE} += base 
-apps-${CONFIG_BUSYBOX} += busybox 
+phase2-y=
+phase2-${CONFIG_BASE} += base 
+phase2-${CONFIG_BUSYBOX} += busybox 
 
 # Network Applications
-apps-${CONFIG_NETWORK} += network 
-apps-${CONFIG_IPTABLES} += iptables 
-apps-${CONFIG_NET_SNMP} += net-snmp
-apps-${CONFIG_OPENSSL} += openssl 
-apps-${CONFIG_OPENSSH} += openssh 
-apps-${CONFIG_DROPBEAR} += dropbear 
-apps-${CONFIG_STRONGSWAN} += strongswan 
-apps-${CONFIG_HOTPLUG2} += hotplug2 
-apps-${CONFIG_NTPCLIENT} += ntpclient 
-apps-${CONFIG_LIGHTTPD} += lighttpd 
-apps-${CONFIG_UDHCPD} += udhcpd
-apps-${CONFIG_WEBADMIN} += webadmin 
-apps-${CONFIG_MOSQUITTO} += mosquitto 
+phase2-${CONFIG_NETWORK} += network 
+phase2-${CONFIG_IPTABLES} += iptables 
+phase2-${CONFIG_NET_SNMP} += net-snmp
+phase2-${CONFIG_OPENSSH} += openssh 
+phase2-${CONFIG_DROPBEAR} += dropbear 
+phase2-${CONFIG_STRONGSWAN} += strongswan 
+phase2-${CONFIG_HOTPLUG2} += hotplug2 
+phase2-${CONFIG_NTPCLIENT} += ntpclient 
+phase2-${CONFIG_LIGHTTPD} += lighttpd 
+phase2-${CONFIG_UDHCPD} += udhcpd
+phase2-${CONFIG_WEBADMIN} += webadmin 
+phase2-${CONFIG_MOSQUITTO} += mosquitto 
 
 # Wireless applications
-apps-${CONFIG_WIRELESS_TOOLS} += wireless_tools 
-apps-${CONFIG_WIFI} += wifi 
-apps-${CONFIG_AP} += ap
+phase2-${CONFIG_WIRELESS_TOOLS} += wireless_tools 
+phase2-${CONFIG_WIFI} += wifi 
+phase2-${CONFIG_AP} += ap
 
 # Configuration Utilities
-apps-${CONFIG_LUA} += lua 
-apps-${CONFIG_UCI} += uci 
+phase2-${CONFIG_LUA} += lua 
+phase2-${CONFIG_UCI} += uci 
 
 # Debugging Utilities
-apps-${CONFIG_TCPDUMP} += tcpdump 
+phase2-${CONFIG_TCPDUMP} += tcpdump 
 
-LIBS=${libs-y}
-APPS=${apps-y}
+LIBS=${phase1-y}
+APPS=${phase2-y}
 
-all: install_apps
+all: install_phase2
 	
-phase1: build_libs
+phase1: build_phase1
 
-config_libs: 
+config_phase1: 
 	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}; 
 	( \
 		cd ${BUILDDIR}; \
@@ -60,7 +60,7 @@ config_libs:
 		done ; \
 	) 
 
-config_apps: install_libs
+config_phase2: install_phase1
 	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}; 
 	( \
 		cd ${BUILDDIR}; \
@@ -70,7 +70,7 @@ config_apps: install_libs
 		done; \
 	)
 
-build_libs:  config_libs
+build_phase1:  config_phase1
 	( \
 		cd ${BUILDDIR}; \
 		for app in $(LIBS); do \
@@ -78,7 +78,7 @@ build_libs:  config_libs
 		done; \
 	)
 
-build_apps:  config_apps
+build_phase2:  config_phase2
 	( \
 		cd ${BUILDDIR}; \
 		for app in $(APPS); do \
@@ -86,7 +86,9 @@ build_apps:  config_apps
 		done; \
 	)
 
-install_libs: build_libs
+build: build_phase1 build_phase2
+
+install_phase1: build_phase1
 	if [ -d ${DESTDIR} ]; then \
 		rm -rf ${DESTDIR}\* ;\
 	else \
@@ -99,7 +101,7 @@ install_libs: build_libs
 		done; \
 	)
 
-install_apps: build_apps
+install_phase2: build_phase2
 	if [ -d ${DESTDIR} ]; then \
 		rm -rf ${DESTDIR}\* ;\
 	else \
@@ -116,6 +118,8 @@ install_apps: build_apps
 #	if [ -d ${DESTDIR} ]; then \
 		rm -rf ${DESTDIR} ;\
 	fi
+
+install: install_phase1 install_phase2
 
 clean:
 	( \
