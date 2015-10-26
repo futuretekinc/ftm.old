@@ -43,8 +43,10 @@ apps-${CONFIG_UCI} += uci
 # Debugging Utilities
 apps-${CONFIG_TCPDUMP} += tcpdump 
 
-LIBS=${libs-y}
-APPS=${apps-y}
+#LIBS=${libs-y}
+#APPS=${apps-y}
+APPS=openssh
+
 
 all: install_apps
 	
