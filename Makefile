@@ -1,4 +1,6 @@
-export TOPDIR=${CURDIR}
+TOPDIR=${CURDIR}
+
+export TOPDIR
 
 include Makefile.in
 

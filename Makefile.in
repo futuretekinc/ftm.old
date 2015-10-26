@@ -45,21 +45,15 @@ define reinit_package
 	$(call init_package,$1)
 endef
 
-define build_package
-	make -C $1 ${BUILD_OPTIONS} 
-endef
-
 define config_package
-	CONFIGURED="$(shell cat ${CONFIGURED_FILE} 2>&1 | grep $1)"
-	if [ "${CONFIGURED}" != "$1" ]; then \
+	if [ -z $(findstring $1,$(shell cat ${CONFIGURED_FILE} 2>&1)) ]; then \
 		(cd $1;./configure $2); echo $1 >> ${CONFIGURED_FILE};\
 	fi	
 endef
 
 define reconfig_package
 	(cd $1;./configure $2)
-	CONFIGURED="$(shell cat ${CONFIGURED_FILE} 2>&1 | grep $1)"
-	if [ "${CONFIGURED}" == "$1" ]; then \
+	if [ -z $(findstring $1,$(shell cat ${CONFIGURED_FILE} 2>&1)) ]; then \
 		echo $1 >> ${CONFIGURED_FILE};\
 	else \
 	fi	
@@ -67,6 +61,10 @@ endef
 
 define set_configured_package
 	echo $1 >> ${CONFIGURED_FILE}
+endef
+
+define build_package
+	make -C $1 ${BUILD_OPTIONS} 
 endef
 
 define install_package
