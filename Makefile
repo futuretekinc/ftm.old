@@ -43,10 +43,8 @@ apps-${CONFIG_UCI} += uci
 # Debugging Utilities
 apps-${CONFIG_TCPDUMP} += tcpdump 
 
-#LIBS=${libs-y}
-#APPS=${apps-y}
-APPS=openssh
-
+LIBS=${libs-y}
+APPS=${apps-y}
 
 all: install_apps
 	
@@ -60,7 +58,7 @@ config_libs:
 			[ -d $$lib ] || tar xvfz ${PKGDIR}/$$lib-pkg.tar.gz ;\
 			make -C $$lib config DESTDIR=${DESTDIR} ; \
 		done ; \
-	)
+	) 
 
 config_apps: install_libs
 	[ -d ${BUILDDIR} ] || mkdir -p ${BUILDDIR}; 
