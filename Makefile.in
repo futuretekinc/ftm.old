@@ -46,14 +46,14 @@ define reinit_package
 endef
 
 define config_package
-	if [ -z $(findstring $1,$(shell cat ${CONFIGURED_FILE} 2>&1)) ]; then \
+	if [ $(shell ${TOPDIR}/tools/search_string ${CONFIGURED_FILE} $1) -eq 0 ]; then \
 		(cd $1;./configure $2); echo $1 >> ${CONFIGURED_FILE};\
 	fi	
 endef
 
 define reconfig_package
 	(cd $1;./configure $2)
-	if [ -z $(findstring $1,$(shell cat ${CONFIGURED_FILE} 2>&1)) ]; then \
+	if [ $(shell ${TOPDIR}/tools/search_string ${CONFIGURED_FILE} $1) -eq 0 ]; then \
 		echo $1 >> ${CONFIGURED_FILE};\
 	else \
 	fi	
