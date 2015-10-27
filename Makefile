@@ -113,7 +113,7 @@ install_phase2: build_phase2
 			make -C $$app install DESTDIR=${DESTDIR} ; \
 		done; \
 	)
-	${TOPDIR}/tools/make_image ${DESTDIR} rootfs.img
+	${TOPDIR}/tools/make_image ${DESTDIR} ${BUILDDIR}/rootfs.img
 
 #	if [ -d ${DESTDIR} ]; then \
 		rm -rf ${DESTDIR} ;\

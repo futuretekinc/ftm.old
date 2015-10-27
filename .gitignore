@@ -2,3 +2,4 @@ rootfs.img
 build
 _root
 *.log
+work

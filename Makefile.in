@@ -15,7 +15,7 @@ export RANLIB=${CROSS}ranlib
 
 export PKGDIR=${TOPDIR}/pkg
 export BUILDDIR=${TOPDIR}/build
-export DESTDIR=${TOPDIR}/_root
+export DESTDIR=${BUILDDIR}/_root
 export PREFIX=/usr
 
 CONFIGDIR=/etc/config
