@@ -45,7 +45,7 @@ phase2-${CONFIG_TCPDUMP} += tcpdump
 
 #LIBS=${phase1-y}
 #APPS=${phase2-y}
-APPS=hotplug2 ntpclient udhcpd
+APPS=openssh
 
 all: install_phase2
 	

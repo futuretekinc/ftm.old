@@ -48,7 +48,10 @@ endef
 define config_package
 	if [ $(shell ${TOPDIR}/tools/search_string ${CONFIGURED_FILE} $1) -eq 0 ]; then \
 		if [ -f $1/configure ]; then \
-			(cd $1;./configure $2); echo $1 >> ${CONFIGURED_FILE};\
+			( cd $1;./configure $2); \
+			if [ $? -? 0 ]; then \
+				echo $1 >> ${CONFIGURED_FILE};\
+			fi;\
 		else \
 			(cd $1;./Configure $2); echo $1 >> ${CONFIGURED_FILE};\
 		fi; \
