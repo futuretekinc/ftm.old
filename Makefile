@@ -43,9 +43,8 @@ phase2-${CONFIG_UCI} += uci
 # Debugging Utilities
 phase2-${CONFIG_TCPDUMP} += tcpdump 
 
-#LIBS=${phase1-y}
-#APPS=${phase2-y}
-APPS=mosquitto
+LIBS=${phase1-y}
+APPS=${phase2-y}
 
 all: install_phase2
 	
@@ -87,7 +86,7 @@ build_phase2:  config_phase2
 		done; \
 	)
 
-build: build_phase1 build_phase2
+build: build_phase2
 
 install_phase1: build_phase1
 	if [ -d ${DESTDIR} ]; then \
@@ -120,7 +119,7 @@ install_phase2: build_phase2
 		rm -rf ${DESTDIR} ;\
 	fi
 
-install: install_phase1 install_phase2
+install: install_phase2
 
 clean:
 	( \
