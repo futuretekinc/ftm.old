@@ -43,9 +43,8 @@ phase2-${CONFIG_UCI} += uci
 # Debugging Utilities
 phase2-${CONFIG_TCPDUMP} += tcpdump 
 
-#LIBS=${phase1-y}
-#APPS=${phase2-y}
-APPS=bind
+LIBS=${phase1-y}
+APPS=${phase2-y}
 
 all: install_phase2
 	
