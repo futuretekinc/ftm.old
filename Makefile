@@ -30,6 +30,7 @@ phase2-${CONFIG_LIGHTTPD} += lighttpd
 phase2-${CONFIG_UDHCPD} += udhcpd
 phase2-${CONFIG_WEBADMIN} += webadmin 
 phase2-${CONFIG_MOSQUITTO} += mosquitto 
+phase2-${CONFIG_BIND} += bind
 
 # Wireless applications
 phase2-${CONFIG_WIRELESS_TOOLS} += wireless_tools 
