@@ -13,7 +13,7 @@ phase1-${CONFIG_QDECODER} += qdecoder
 phase1-${CONFIG_LIBPCAP} += libpcap
 phase1-${CONFIG_OPENSSL} += openssl 
 
-phase2-y=
+phase2-y= utils
 phase2-${CONFIG_BASE} += base 
 phase2-${CONFIG_BUSYBOX} += busybox 
 
